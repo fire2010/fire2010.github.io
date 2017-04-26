@@ -6,17 +6,17 @@
     <title>Redis持久化 | fire</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-        <meta name="keywords" content="技术" />
+        <meta name="keywords" content="redis" />
     
     <meta name="description" content="Redis的持久化Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。 RDB RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照">
-<meta name="keywords" content="技术">
+<meta name="keywords" content="redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Redis持久化">
 <meta property="og:url" content="http://yoursite.com/2017/03/01/redis/index.html">
 <meta property="og:site_name" content="fire">
 <meta property="og:description" content="Redis的持久化Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。 RDB RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照">
 <meta property="og:image" content="http://yoursite.com/2017/03/01/redis/redis3.png">
-<meta property="og:updated_time" content="2017-04-26T15:50:47.973Z">
+<meta property="og:updated_time" content="2017-04-26T16:09:09.329Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Redis持久化">
 <meta name="twitter:description" content="Redis的持久化Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。 RDB RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照">
@@ -71,21 +71,21 @@
                                 </li>
                             
                                 <li class="main-nav-list-item" >
-                                    <a class="main-nav-list-link" href="/">技术</a>
-                                </li>
-                            
-                                <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/">生活</a>
                                 </li>
                             
-                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/redis/">redis</a></li></ul>
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/技术/">技术</a></li></ul>
                                     
                                 <li class="main-nav-list-item" >
-                                    <a class="main-nav-list-link" href="/">关于</a>
+                                    <a class="main-nav-list-link" href="/">音乐</a>
                                 </li>
                             
                                 <li class="main-nav-list-item" >
                                     <a class="main-nav-list-link" href="/">求职</a>
+                                </li>
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">关于</a>
                                 </li>
                             
                         </ul>
@@ -141,7 +141,7 @@
                         <div class="main-body-header">
     <h1 class="header">
     
-    <a class="page-title-link" href="/categories/redis/">redis</a>
+    <a class="page-title-link" href="/categories/技术/">技术</a>
     </h1>
 </div>
                         <div class="main-body-content">
@@ -164,7 +164,7 @@
     <time datetime="2017-03-01T08:14:02.000Z" itemprop="datePublished">2017-03-01</time>
 </a>
                 
-    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li></ul>
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
 
             </div>
         
@@ -209,7 +209,7 @@
 
 
 
-    <a data-url="http://yoursite.com/2017/03/01/redis/" data-id="cj1z5kh3a0000csnzgywn0owt" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://yoursite.com/2017/03/01/redis/" data-id="cj1z6l75u0000cgnz7p3obrqc" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
@@ -361,7 +361,7 @@
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/redis/">redis</a></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/技术/">技术</a></p>
                             <p class="item-title"><a href="/2017/03/01/redis/" class="title">Redis持久化</a></p>
                             <p class="item-date"><time datetime="2017-03-01T08:14:02.000Z" itemprop="datePublished">2017-03-01</time></p>
                         </div>
@@ -376,7 +376,7 @@
     <div class="widget-wrap widget-list">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/技术/">技术</a><span class="category-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -396,7 +396,7 @@
     <div class="widget-wrap widget-list">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a><span class="tag-list-count">1</span></li></ul>
         </div>
     </div>
 
@@ -406,7 +406,7 @@
     <div class="widget-wrap widget-float">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/技术/" style="font-size: 10px;">技术</a>
+            <a href="/tags/redis/" style="font-size: 10px;">redis</a>
         </div>
     </div>
 
