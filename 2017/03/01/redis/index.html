@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title>Redis持久化 | fire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+        <meta name="keywords" content="技术" />
+    
+    <meta name="description" content="Redis的持久化Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。 RDB RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照">
+<meta name="keywords" content="技术">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis持久化">
+<meta property="og:url" content="http://yoursite.com/2017/03/01/redis/index.html">
+<meta property="og:site_name" content="fire">
+<meta property="og:description" content="Redis的持久化Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。 RDB RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照">
+<meta property="og:image" content="http://yoursite.com/2017/03/01/redis/redis3.png">
+<meta property="og:updated_time" content="2017-04-26T15:50:47.973Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Redis持久化">
+<meta name="twitter:description" content="Redis的持久化Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。 RDB RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照">
+<meta name="twitter:image" content="http://yoursite.com/2017/03/01/redis/redis3.png">
+    
+
+    
+        <link rel="alternate" href="/" title="fire" type="application/atom+xml" />
+    
+
+    
+
+    <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendor/titillium-web/styles.css">
+    <link rel="stylesheet" href="/vendor/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/vendor/jquery/2.0.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/vendor/lightgallery/css/lightgallery.min.css">
+    
+    
+    
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                        <h2 class="subtitle-wrap">
+                            <p class="subtitle">Believe in yourself</p>
+                        </h2>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">主页</a>
+                                </li>
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">技术</a>
+                                </li>
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">生活</a>
+                                </li>
+                            
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/redis/">redis</a></li></ul>
+                                    
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
+                                </li>
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">求职</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/redis/">redis</a>
+    </h1>
+</div>
+                        <div class="main-body-content">
+                            <article id="post-redis" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Redis持久化
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-subtitle">
+                <a href="/2017/03/01/redis/" class="article-date">
+    <time datetime="2017-03-01T08:14:02.000Z" itemprop="datePublished">2017-03-01</time>
+</a>
+                
+    <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术/">技术</a></li></ul>
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            <p><img src="/2017/03/01/redis/redis3.png" alt=""></p>
+<h2 id="Redis的持久化"><a href="#Redis的持久化" class="headerlink" title="Redis的持久化"></a>Redis的持久化</h2><p>Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。<br>Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。</p>
+<h3 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h3><ul>
+<li>RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照的条件在配置文件中指定。有2个参数构成：时间和改动的键的个数，当在指定时间内被更改的键的个数大于指定数值时就会进行快照。</li>
+<li>RDB是Redis的默认持久化方式。<h3 id="1-配置"><a href="#1-配置" class="headerlink" title="1.配置"></a>1.配置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">################################ SNAPSHOTTING  ################################</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># Save the DB on disk:</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#   save &lt;seconds&gt; &lt;changes&gt;</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#   Will save the DB if both the given number of seconds and the given</span></div><div class="line"><span class="comment">#   number of write operations against the DB occurred.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#   In the example below the behaviour will be to save:</span></div><div class="line"><span class="comment">#   after 900 sec (15 min) if at least 1 key changed</span></div><div class="line"><span class="comment">#   after 300 sec (5 min) if at least 10 keys changed</span></div><div class="line"><span class="comment">#   after 60 sec if at least 10000 keys changed</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#   Note: you can disable saving completely by commenting out all "save" lines.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#   It is also possible to remove all the previously configured save</span></div><div class="line"><span class="comment">#   points by adding a save directive with a single empty string argument</span></div><div class="line"><span class="comment">#   like in the following example:</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#   save ""</span></div><div class="line"></div><div class="line">save 900 1</div><div class="line">save 300 10</div><div class="line">save 60 10000</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在配置文件中已经预置了3个条件：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">save 900 1  <span class="comment">#15分钟内有至少1个键被更改则进行快照</span></div><div class="line">save 300 10  <span class="comment">#5分钟内有至少10个键被更改则进行快照</span></div><div class="line">save 60 10000  <span class="comment">#1分钟内有至少10000个键被更改则进行快照</span></div></pre></td></tr></table></figure></p>
+<p>以上条件之间是”或”的关系。</p>
+<h3 id="2-rdb文件"><a href="#2-rdb文件" class="headerlink" title="2.rdb文件"></a>2.rdb文件</h3><p>默认的rdb的文件路径是在当前目录，文件名是：dump.rdb,可以在配置文件中修改路径和文件名，分别是dir和dbfilename。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># The filename where to dump the DB</span></div><div class="line">dbfilename dump.rdb   <span class="comment">#快照文件</span></div><div class="line"></div><div class="line"><span class="comment"># The working directory.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># The DB will be written inside this directory, with the filename specified</span></div><div class="line"><span class="comment"># above using the 'dbfilename' configuration directive.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># The Append Only File will also be created inside this directory.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment"># Note that you must specify a directory here, not a file name.</span></div><div class="line">dir ./   <span class="comment">#存储路径</span></div></pre></td></tr></table></figure></p>
+<h3 id="3-RDB数据恢复过程"><a href="#3-RDB数据恢复过程" class="headerlink" title="3.RDB数据恢复过程"></a>3.RDB数据恢复过程</h3><p>Redis启动后会读取RDB快照文件，将数据从硬盘载入到内存，一般情况下1GB的快照文件载入到内存的时间约为20~30秒。(不同服务器会有差异)</p>
+<h3 id="4-快照过程"><a href="#4-快照过程" class="headerlink" title="4.快照过程"></a>4.快照过程</h3><p>RDB的快照过程如下:</p>
+<ul>
+<li>1.Redis使用fork函数复制一份当前进程(父进程)的副本(子进程);</li>
+<li>2.父进程继续接收并处理客户端发来的命令，而子进程开始将内存中的数据写入到硬盘中的临时文件;</li>
+<li>3.当子进程写入完所有数据后会用该临时文件替换旧的RDB文件。<h3 id="5-手动快照"><a href="#5-手动快照" class="headerlink" title="5.手动快照"></a>5.手动快照</h3>如果没有触发自动快照,需要对redis执行手动快照,SAVE和BGSAVE都是执行手动快照,但是两者有区别:<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SAVE命令:是由主进程进行快照,会阻塞其他请求。</div><div class="line">BGSAVE命令:是通过fork子进程进行快照。</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="6-快照需要注意"><a href="#6-快照需要注意" class="headerlink" title="6.快照需要注意"></a>6.快照需要注意</h3><p>注意:由于Redis使用fork来复制一份当前进程，那么子进程就会占有和主进程一样内存资源，比如说主进程8GB内存,那么在备份的时候必须保证有16GB的内存,要不然会启用虚拟内存,性能非常差。</p>
+<h3 id="7-RDB文件的压缩"><a href="#7-RDB文件的压缩" class="headerlink" title="7.RDB文件的压缩"></a>7.RDB文件的压缩</h3><p>RDB文件是通过压缩的,可以通过配置rdbcompression参数来禁用压缩。<br>压缩和不压缩的优缺点：</p>
+<ul>
+<li>压缩：<br>  优点：减少磁盘存储空间<br>  缺点：消耗CPU资源</li>
+<li>不压缩：<br>  优点：不消耗CPU资源<br>  缺点：占用磁盘空间多</li>
+</ul>
+<p>如何选择？ 看需求、看服务器资源情况。<br>Redis默认是开启压缩的，配置:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Compress string objects using LZF when dump .rdb databases?</span></div><div class="line"><span class="comment"># For default that's set to 'yes' as it's almost always a win.</span></div><div class="line"><span class="comment"># If you want to save some CPU in the saving child set it to 'no' but</span></div><div class="line"><span class="comment"># the dataset will likely be bigger if you have compressible values or keys.</span></div><div class="line">rdbcompression yes</div></pre></td></tr></table></figure></p>
+<h3 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Redis的AOF持久化策略是将发送到Redis服务端的每一条命令都记录下来,并且保存到硬盘中的AOF文件,AOF文件的位置和RDB文件的位置相同,都是通过dir参数设置,默认的文件名是appendonly.aof,可以通过appendfilename参数修改。</div><div class="line">127.0.0.1:6379&gt;<span class="built_in">set</span> <span class="built_in">test</span> 123</div><div class="line">OK</div><div class="line">127.0.0.1:6379&gt;<span class="built_in">set</span> <span class="built_in">test</span>2 234</div><div class="line">OK</div><div class="line">执行以上命令,可以看到appendonly.aof文件保存了操作命令：</div></pre></td></tr></table></figure>
+<h3 id="1-测试AOF"><a href="#1-测试AOF" class="headerlink" title="1.测试AOF"></a>1.测试AOF</h3><p>当客户端向服务器发送Redis命令时，Redis会将所执行的命令记录到aof文件中，如下：<br><img src="/2017/03/01/redis/redis2.png" alt=""></p>
+<h3 id="2-优化AOF文件"><a href="#2-优化AOF文件" class="headerlink" title="2.优化AOF文件"></a>2.优化AOF文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">可以使用BGREWRITEAOF命令重写AOF文件。</div></pre></td></tr></table></figure>
+<p>目的：去除数据的中间执行过程，保留最终数据命令即可。</p>
+<h3 id="3-重写策略"><a href="#3-重写策略" class="headerlink" title="3.重写策略"></a>3.重写策略</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">重写策略的参数设置：</div><div class="line">auto-aof-rewrite-percentage 100</div><div class="line">当前的AOF文件大小超过上一次重写时的AOF文件大小的百分之多少时会再次进行重写,如果之前没有重写过，则以启动时的AOF文件大小为依据。</div><div class="line">auto-aof-rewrite-min-size 64mb</div><div class="line">限制了允许重写的最小AOF文件大小,通常在AOF文件很小的时候即使其中有些冗余的命令也是可以忽略的。</div></pre></td></tr></table></figure>
+<h3 id="4-文件同步策略"><a href="#4-文件同步策略" class="headerlink" title="4.文件同步策略"></a>4.文件同步策略</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">文件写入默认情况下会先写入到系统的缓存中,系统每30秒同步一次,才是真正的写入到硬盘,如果在这30秒服务器宕机那数据也会丢失的,Redis可以通过配置来修改同步策略：</div><div class="line"><span class="comment">#appendfsync always 每次都同步(最安全但是最慢)</span></div><div class="line">appendfsync everysec 每秒同步(默认的同步策略)</div><div class="line"><span class="comment">#appendfsync no 不主动同步,由操作系统来决定(最块但是不安全)</span></div></pre></td></tr></table></figure>
+<p>注意：即使每秒做文件同步也可能导致数据丢失。</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="http://yoursite.com/2017/03/01/redis/" data-id="cj1z5kh3a0000csnzgywn0owt" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+</article>
+
+    <section id="comments">
+    
+    </section>
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>关注我 :</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="google-plus" href="/" target="_blank">
+                        <i class="icon fa fa-google-plus"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="github" href="https://github.com/" target="_blank">
+                        <i class="icon fa fa-github"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/" target="_blank">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+    
+    <div class="widgets-container">
+        
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/03/01/redis/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/2017/03/01/redis/redis3.png)" alt="Redis持久化" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/redis/">redis</a></p>
+                            <p class="item-title"><a href="/2017/03/01/redis/" class="title">Redis持久化</a></p>
+                            <p class="item-date"><time datetime="2017-03-01T08:14:02.000Z" itemprop="datePublished">2017-03-01</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/技术/" style="font-size: 10px;">技术</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="">test</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2017 fire</p>
+                <p>Powered by <a href="//github.com/fire2010" target="_blank">fire2010</a>. Theme by <a href="//github.com/fire2010" target="_blank">fire2010</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+        
+
+    
+        <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-share.min.js"></script>
+        <script src="/vendor/lightgallery/js/lg-video.min.js"></script>
+    
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

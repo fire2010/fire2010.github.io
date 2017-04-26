@@ -61,7 +61,7 @@
                         <ul id="main-nav">
                             
                                 <li class="main-nav-list-item" >
-                                    <a class="main-nav-list-link" href="/hexo-theme-hueman/">主页</a>
+                                    <a class="main-nav-list-link" href="/">主页</a>
                                 </li>
                             
                                 <li class="main-nav-list-item" >
@@ -72,10 +72,10 @@
                                     <a class="main-nav-list-link" href="/">生活</a>
                                 </li>
                             
-                                        
+                                        <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/redis/">redis</a></li></ul>
                                     
                                 <li class="main-nav-list-item" >
-                                    <a class="main-nav-list-link" href="/hexo-theme-hueman/about/index.html">关于</a>
+                                    <a class="main-nav-list-link" href="/about/index.html">关于</a>
                                 </li>
                             
                                 <li class="main-nav-list-item" >
@@ -158,17 +158,15 @@
         <article class="article article-summary">
     <div class="article-summary-inner">
         
-        <a href="/2017/04/25/fire/" class="thumbnail">
+        <a href="/2017/03/01/redis/" class="thumbnail">
     
     
-        <span style="background-image:url(/2017/04/25/fire/shoes.jpg)" alt="fire" class="thumbnail-image"></span>
+        <span style="background-image:url(/2017/03/01/redis/redis3.png)" alt="Redis持久化" class="thumbnail-image"></span>
     
     
         
 <span class="comment-counter">
     <i class="fa fa-comments-o"></i>
-    
-        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://yoursite.com/2017/04/25/fire/">0</span>
     
 </span>
 
@@ -178,66 +176,22 @@
         
         <div class="article-meta">
             <p class="category">
-            
+            <a class="article-category-link" href="/categories/redis/">redis</a>
             </p>
-            <p class="date"><time datetime="2017-04-25T08:14:02.000Z" itemprop="datePublished">2017-04-25</time></p>
+            <p class="date"><time datetime="2017-03-01T08:14:02.000Z" itemprop="datePublished">2017-03-01</time></p>
         </div>
         
     
         <h1 class="article-title" itemprop="name">
-        <a href="/2017/04/25/fire/">fire</a>
+        <a href="/2017/03/01/redis/">Redis持久化</a>
         </h1>
     
 
         <p class="article-excerpt">
-            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick
-        </p>
-    </div>
-</article>
-    
-
-    
-    
-    
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <a href="/2017/04/09/hello-world/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
-    
-    
-        
-<span class="comment-counter">
-    <i class="fa fa-comments-o"></i>
-    
-        <span class="disqus-comment-count" data-disqus-identifier="" data-disqus-url="http://yoursite.com/2017/04/09/hello-world/">0</span>
-    
-</span>
-
-    
-</a>
-
-        
-        <div class="article-meta">
-            <p class="category">
             
-            </p>
-            <p class="date"><time datetime="2017-04-09T07:05:08.589Z" itemprop="datePublished">2017-04-09</time></p>
-        </div>
-        
-    
-        <h1 class="article-title" itemprop="name">
-        <a href="/2017/04/09/hello-world/">Hello World</a>
-        </h1>
-    
-
-        <p class="article-excerpt">
-            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.
-Quick
+Redis的持久化Redis的强大功能很大程度上是由于其将所有数据都存储在内存中，为了使Redis在重启后仍能保证数据不丢失，需要将数据从内存中以某种形式持久化到硬盘中。Redis支持两种方式的持久化，一种是RDB方式，一种是AOF方式。可以单独使用其中一种或将两种结合使用。
+RDB
+RDB方式是通过快照完成的，当符合一定条件时Redis会自动将内存中的所有数据进行快照并且存储到硬盘上。进行快照
         </p>
     </div>
 </article>
@@ -321,30 +275,10 @@ Quick
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2017/04/25/fire/" class="thumbnail">
+                            <a href="/2017/03/01/redis/" class="thumbnail">
     
     
-        <span style="background-image:url(/2017/04/25/fire/shoes.jpg)" alt="fire" class="thumbnail-image"></span>
-    
-    
-</a>
-
-                        </div>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2017/04/25/fire/" class="title">fire</a></p>
-                            <p class="item-date"><time datetime="2017-04-25T08:14:02.000Z" itemprop="datePublished">2017-04-25</time></p>
-                        </div>
-                    </li>
-                
-                    <li>
-                        
-                        <div class="item-thumbnail">
-                            <a href="/2017/04/09/hello-world/" class="thumbnail">
-    
-    
-        <span class="thumbnail-image thumbnail-none"></span>
+        <span style="background-image:url(/2017/03/01/redis/redis3.png)" alt="Redis持久化" class="thumbnail-image"></span>
     
     
 </a>
@@ -352,9 +286,9 @@ Quick
                         </div>
                         
                         <div class="item-inner">
-                            <p class="item-category"></p>
-                            <p class="item-title"><a href="/2017/04/09/hello-world/" class="title">Hello World</a></p>
-                            <p class="item-date"><time datetime="2017-04-09T07:05:08.589Z" itemprop="datePublished">2017-04-09</time></p>
+                            <p class="item-category"><a class="article-category-link" href="/categories/redis/">redis</a></p>
+                            <p class="item-title"><a href="/2017/03/01/redis/" class="title">Redis持久化</a></p>
+                            <p class="item-date"><time datetime="2017-03-01T08:14:02.000Z" itemprop="datePublished">2017-03-01</time></p>
                         </div>
                     </li>
                 
@@ -364,22 +298,43 @@ Quick
 
             
                 
-
-            
-                
     <div class="widget-wrap widget-list">
-        <h3 class="widget-title">归档</h3>
+        <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a><span class="archive-list-count">2</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><span class="category-list-count">1</span></li></ul>
         </div>
     </div>
 
 
             
                 
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">三月 2017</a><span class="archive-list-count">1</span></li></ul>
+        </div>
+    </div>
+
 
             
                 
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术/">技术</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/技术/" style="font-size: 10px;">技术</a>
+        </div>
+    </div>
+
 
             
                 
@@ -389,7 +344,7 @@ Quick
             <ul>
                 
                     <li>
-                        <a href="http://hexo.io">Hexo</a>
+                        <a href="">test</a>
                     </li>
                 
             </ul>
@@ -419,21 +374,6 @@ Quick
     </div>
 </footer>
         
-    
-    <script>
-    var disqus_shortname = 'hexo-theme-hueman';
-    
-    
-    (function() {
-    var dsq = document.createElement('script');
-    dsq.type = 'text/javascript';
-    dsq.async = true;
-    dsq.src = '//' + disqus_shortname + '.disqus.com/count.js';
-    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-    })();
-    </script>
-
-
 
     
         <script src="/vendor/lightgallery/js/lightgallery.min.js"></script>
